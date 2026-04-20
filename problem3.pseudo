@@ -1,0 +1,46 @@
+EDIT-DISTANCE(X, Y):
+	m ← length(X)
+	n ← length(Y)
+	create dp[0..m][0..n]
+
+	for i ← 0 to m:
+		dp[i][0] ← i
+
+	for j ← 0 to n:
+		dp[0][j] ← j
+
+	for i ← 1 to m:
+		for j ← 1 to n:
+			if X[i-1] = Y[j-1]:
+				dp[i][j] ← dp[i-1][j-1]
+			else:
+				dp[i][j] ← 1 + min(
+					dp[i-1][j],      // delete
+					dp[i][j-1],      // insert
+					dp[i-1][j-1]     // replace
+				)
+
+	return dp[m][n]
+
+PRINT-OPERATIONS(X, Y, dp):
+	i ← length(X)
+	j ← length(Y)
+	ops ← empty list
+
+	while i > 0 or j > 0:
+		if i > 0 and j > 0 and X[i-1] = Y[j-1]:
+			i ← i - 1
+			j ← j - 1
+		else if i > 0 and j > 0 and dp[i][j] = dp[i-1][j-1] + 1:
+			ops.append("Replace X[i-1] with Y[j-1]")
+			i ← i - 1
+			j ← j - 1
+		else if i > 0 and dp[i][j] = dp[i-1][j] + 1:
+			ops.append("Delete X[i-1]")
+			i ← i - 1
+		else:
+			ops.append("Insert Y[j-1]")
+			j ← j - 1
+
+	reverse(ops)
+	return ops
