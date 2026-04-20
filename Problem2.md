@@ -1,5 +1,7 @@
 Closest Pair of Points
 
+![Problem 2 Question](assets/problem2.png)
+
 Main Goal:
 
 Given a set of points in the plane, find the minimum Euclidean distance between any two points.
