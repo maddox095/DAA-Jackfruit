@@ -1,6 +1,6 @@
 Main Goal:
 
-(!)[]
+![Problem 1 Question](assets/problem1.png)
 
 Select the maximum number of mutually compatible (non-overlapping) activities.
 

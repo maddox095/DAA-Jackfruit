@@ -1,0 +1,37 @@
+CLOSEST-PAIR(P):
+    Px ← P sorted by x-coordinate          // O(n log n), once
+    Py ← P sorted by y-coordinate          // O(n log n), once
+    return CLOSEST-PAIR-REC(Px, Py)
+
+CLOSEST-PAIR-REC(Px, Py):
+    n ← |Px|
+    if n ≤ 3:
+        return BRUTE-FORCE(Px)
+
+    mid ← n / 2
+    midPoint ← Px[mid]
+
+    // Split Py into left/right halves maintaining y-sort order
+    PyL ← points in Py with x ≤ midPoint.x  (left half)
+    PyR ← points in Py with x > midPoint.x   (right half)
+
+    dL ← CLOSEST-PAIR-REC(Px[0..mid-1], PyL)
+    dR ← CLOSEST-PAIR-REC(Px[mid..n-1], PyR)
+    δ  ← min(dL, dR)
+
+    // Build strip: points within δ of the dividing line, sorted by y
+    strip[] ← { p ∈ Py : |p.x - midPoint.x| < δ }
+
+    // Check strip pairs (at most 7 comparisons per point)
+    for i ← 0 to |strip| - 1:
+        for j ← i + 1 to |strip| - 1 AND strip[j].y - strip[i].y < δ:
+            δ ← min(δ, dist(strip[i], strip[j]))
+
+    return δ
+
+BRUTE-FORCE(P):
+    min_dist ← ∞
+    for i ← 0 to |P| - 2:
+        for j ← i + 1 to |P| - 1:
+            min_dist ← min(min_dist, dist(P[i], P[j]))
+    return min_dist
